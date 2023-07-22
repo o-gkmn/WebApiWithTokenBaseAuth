@@ -1,45 +1,47 @@
 ﻿using AutoMapper;
 using Entities.DataTransferObject;
-using Entities.Exceptions;
 using Entities.Models;
-using Repositories.Contracts;
+using Microsoft.AspNetCore.Identity;
 using Services.Contracts;
 
 namespace Services
 {
     public class AuthManager : IAuthService
     {
-        private readonly IRepositoryManager _manager;
         private readonly IMapper _mapper;
+        private readonly UserManager<User> _manager;
 
-        public AuthManager(IRepositoryManager manager, IMapper mapper)
+        private User? _user;
+        
+        public AuthManager(UserManager<User> manager, IMapper mapper = null)
         {
             _manager = manager;
             _mapper = mapper;
         }
 
-        public bool Register(UserForRegistrationDto userForRegistration)
+        public async Task<IdentityResult> Register(UserForRegistrationDto userForRegistration)
         {
-            if (userForRegistration is null)
-                throw new EmptyUserBadRequestExceptions();
-
-            if (userForRegistration.Password.Length < 6)
-                throw new PasswordWeakBadRequestException();
-
             var user = _mapper.Map<User>(userForRegistration);
-            var result = _manager.Authentication.Register(user);
+
+            var result = await _manager.CreateAsync(user, userForRegistration.Password);
+
+            if (result.Succeeded)
+                await _manager.AddToRolesAsync(user, userForRegistration.Roles);
+
             return result;
         }
 
-        public bool Login(UserForLoginDto userForLogin)
+        public async Task<bool> Login(UserForLoginDto userForLogin)
         {
-            if(userForLogin is null)
-                throw new EmptyUserBadRequestExceptions();
+            _user = await _manager.FindByNameAsync(userForLogin.UserName);
 
-            var user = _mapper.Map<User>(userForLogin);
-            var result = _manager.Authentication.Login(user);
+            var result = (_user != null && await _manager.CheckPasswordAsync(_user, userForLogin.Password));
+
+            if (!result)
+            {
+                Console.WriteLine("Authentication Failed. Wrong user name or password");
+            }
             return result;
         }
-
-    }
+    } 
 }

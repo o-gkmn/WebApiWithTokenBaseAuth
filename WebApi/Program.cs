@@ -11,10 +11,12 @@ builder.Services.AddControllers()
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.ConfigureSqlServer(builder.Configuration);
+builder.Services.ConfigureIdentity();
 builder.Services.ConfigureServiceManager();
 builder.Services.ConfigureRepositoryManager();
 builder.Services.RegisterServices();
-builder.Services.RegisterRepository();
+
 
 var app = builder.Build();
 
@@ -27,6 +29,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

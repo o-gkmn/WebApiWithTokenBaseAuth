@@ -1,16 +1,11 @@
 ﻿using Repositories.Contracts;
 
-namespace Repositories
+namespace Repositories.EFCore
 {
     public class RepositoryManager : IRepositoryManager
     {
-        private readonly IAuthenticationRepository _authenticationRepository;
-
-        public RepositoryManager(IAuthenticationRepository authenticationRepository)
+        public RepositoryManager()
         {
-            _authenticationRepository = authenticationRepository;
         }
-
-        public IAuthenticationRepository Authentication => _authenticationRepository;
     }
 }

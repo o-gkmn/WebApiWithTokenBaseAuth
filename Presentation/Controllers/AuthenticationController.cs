@@ -17,21 +17,21 @@ namespace WebApi
         }
 
         [HttpPost("register")]
-        public IActionResult Register([FromBody] UserForRegistrationDto userForRegistrationDto)
+        public async Task<IActionResult> Register([FromBody] UserForRegistrationDto userForRegistrationDto)
         {
-            var result = _manager.AuthenticationService.Register(userForRegistrationDto);
+            var result = await _manager.AuthenticationService.Register(userForRegistrationDto);
 
-            if(!result)
+            if(!result.Succeeded)
                 return BadRequest();
 
             return StatusCode(201);
         }
 
         [HttpPost("login")]
-        public IActionResult Login([FromBody] UserForLoginDto userForLogin)
+        public async Task<IActionResult> Login([FromBody] UserForLoginDto userForLogin)
         {
 
-            var result = _manager.AuthenticationService.Login(userForLogin);
+            var result = await _manager.AuthenticationService.Login(userForLogin);
 
             if (!result)
                 return Unauthorized();

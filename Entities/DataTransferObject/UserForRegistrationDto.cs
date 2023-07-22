@@ -4,16 +4,17 @@ namespace Entities.DataTransferObject
 {
     public record UserForRegistrationDto
     {
-        public String? FirstName { get; init; }
-        public String? LastName { get; init; }
-        public String? Email { get; init; }
-        public String? PhoneNumber { get; init; }
+        public string? FirstName { get; init; }
+        public string? LastName { get; init; }
+        public string? Email { get; init; }
+        public string? PhoneNumber { get; init; }
+        public ICollection<string>? Roles { get; init; }
 
         [Required(ErrorMessage = "Username is not empty")]
-        public String UserName { get; init; }
+        public string UserName { get; init; }
 
         [Required(ErrorMessage = "Password is not empty")]
-        public String Password { get; init; }
+        public string Password { get; init; }
 
     }
 
