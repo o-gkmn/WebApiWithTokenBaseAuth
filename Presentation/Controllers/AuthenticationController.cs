@@ -30,14 +30,19 @@ namespace WebApi
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] UserForLoginDto userForLogin)
         {
-
             var result = await _manager.AuthenticationService.Login(userForLogin);
-
             if (!result)
                 return Unauthorized();
 
-            Console.WriteLine("Login is succed");
-            return StatusCode(201);
+            var tokenDto = await _manager.AuthenticationService.CreateToken(populateExp: true);
+            return Ok(tokenDto);
+        }
+
+        [HttpPost("refresh")]
+        public async Task<IActionResult> Refresh([FromBody] TokenDto tokenDto)
+        {
+            var tokenDtoReturn = await _manager.AuthenticationService.RefreshToken(tokenDto);
+            return Ok(tokenDtoReturn);
         }
     }
 }
