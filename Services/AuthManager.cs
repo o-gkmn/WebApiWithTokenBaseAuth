@@ -66,6 +66,8 @@ namespace Services
             if (populateExp)
                 _user.RefreshTokenExpiryTime = DateTime.Now.AddDays(7);
 
+            await _manager.UpdateAsync(_user);
+
             var accesToken = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
             return new TokenDto
             {
@@ -159,7 +161,7 @@ namespace Services
 
             var jwtSecurityToken = securityToken as JwtSecurityToken;
 
-            if (jwtSecurityToken is null || jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+            if (jwtSecurityToken is null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
                 throw new SecurityTokenException("Invalid Token");
 
             return principal;
