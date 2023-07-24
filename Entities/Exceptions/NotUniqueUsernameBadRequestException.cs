@@ -2,7 +2,7 @@
 {
     public class NotUniqueUsernameBadRequestException : BadRequestException
     {
-        public NotUniqueUsernameBadRequestException() : base("Kullanıcı adınız eşsiz olmalıdır.")
+        public NotUniqueUsernameBadRequestException() : base("Username must be unique")
         {
         }
     }

@@ -2,6 +2,5 @@
 {
     public interface IRepositoryManager
     {
-        public IAuthenticationRepository Authentication { get; }
     }
 }
