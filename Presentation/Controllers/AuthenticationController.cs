@@ -1,5 +1,4 @@
 ﻿using Entities.DataTransferObject;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Contracts;
 

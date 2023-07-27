@@ -1,10 +1,8 @@
 ﻿using Entities.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Repositories;
 using Repositories.Contracts;
 using Repositories.EFCore;
 using Services;
@@ -15,10 +13,10 @@ namespace WebApi.Extensions
 {
     public static class ServiceExtensions
     {
-        public static void ConfigureSqlServer(this IServiceCollection services, IConfiguration configuration) 
+        public static void ConfigureSqlServer(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<RepositoryContext>(options => 
-                options.UseSqlServer(configuration.GetConnectionString("sqlConnection")));    
+            services.AddDbContext<RepositoryContext>(options =>
+                options.UseSqlServer(configuration.GetConnectionString("sqlConnection")));
         }
 
         public static void ConfigureRepositoryManager(this IServiceCollection services)

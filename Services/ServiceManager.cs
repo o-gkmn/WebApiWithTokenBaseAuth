@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Services.Contracts;
+﻿using Services.Contracts;
 
 namespace Services
 {

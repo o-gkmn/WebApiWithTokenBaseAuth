@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Services.Contracts;
-using System.IdentityModel.Tokens.Jwt;
 
 public class TokenAuthenticationFilter : IAuthorizationFilter
 {
