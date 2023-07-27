@@ -16,6 +16,7 @@ builder.Services.ConfigureIdentity();
 builder.Services.ConfigureServiceManager();
 builder.Services.ConfigureRepositoryManager();
 builder.Services.RegisterServices();
+builder.Services.ConfigureTokenManager();
 builder.Services.ConfigureJwt(builder.Configuration);
 
 var app = builder.Build();
