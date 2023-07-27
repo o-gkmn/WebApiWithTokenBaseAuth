@@ -1,15 +1,9 @@
 ﻿using AutoMapper;
 using Entities.DataTransferObject;
-using Entities.Exceptions;
 using Entities.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 using Services.Contracts;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Security.Cryptography;
-using System.Text;
 
 namespace Services
 {
@@ -17,15 +11,17 @@ namespace Services
     {
         private readonly IMapper _mapper;
         private readonly UserManager<User> _manager;
-        private readonly IConfiguration _configuration;
+        private readonly IAccesTokenManager _accesTokenManager;
+        private readonly IRefreshTokenManager _refreshTokenManager;
 
         private User? _user;
 
-        public AuthManager(UserManager<User> manager, IMapper mapper, IConfiguration configuration)
+        public AuthManager(UserManager<User> manager, IMapper mapper, IAccesTokenManager tokenManager, IRefreshTokenManager refreshTokenManager, IConfiguration configuration = null)
         {
             _manager = manager;
             _mapper = mapper;
-            _configuration = configuration;
+            _accesTokenManager = tokenManager;
+            _refreshTokenManager = refreshTokenManager;
         }
 
         public async Task<IdentityResult> Register(UserForRegistrationDto userForRegistration)
@@ -56,19 +52,9 @@ namespace Services
 
         public async Task<TokenDto> CreateToken(bool populateExp)
         {
-            var signinCredentials = GetSignInCredentials();
-            var claims = await GetClaims();
-            var tokenOptions = GenerateTokenOptions(signinCredentials, claims);
+            var accesToken = await _accesTokenManager.GenerateToken(_user);
+            var refreshToken = await _refreshTokenManager.GenerateToken(_user);
 
-            var refreshToken = GenerateRefreshToken();
-            _user.RefreshToken = refreshToken;
-
-            if (populateExp)
-                _user.RefreshTokenExpiryTime = DateTime.Now.AddDays(7);
-
-            await _manager.UpdateAsync(_user);
-
-            var accesToken = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
             return new TokenDto
             {
                 AccesToken = accesToken,
@@ -78,95 +64,19 @@ namespace Services
 
         public async Task<TokenDto> RefreshToken(TokenDto tokenDto)
         {
-            var principal = GetPrincipalFromExpiredToken(tokenDto.AccesToken);
-            var user = await _manager.FindByNameAsync(principal.Identity.Name);
-
-            if (user is null || user.RefreshToken != tokenDto.RefreshToken || user.RefreshTokenExpiryTime <= DateTime.Now)
-                throw new RefreshTokenBadRequestException();
-
-            _user = user;
-            return await CreateToken(populateExp: false);
-
-        }
-
-        private SigningCredentials GetSignInCredentials()
-        {
-            var jwtSettings = _configuration.GetSection("JWT");
-            var key = jwtSettings["Key"];
-            var secret = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
-            return new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);
-        }
-
-        private async Task<List<Claim>> GetClaims()
-        {
-            var claims = new List<Claim>()
+            if (!_accesTokenManager.ValidateToken(tokenDto.AccesToken) && _refreshTokenManager.ValidateToken(tokenDto.RefreshToken))
             {
-                new Claim(ClaimTypes.Name, _user.UserName)
-            };
-
-            var roles = await _manager.GetRolesAsync(_user);
-
-            foreach (var role in roles)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, role));
+                var refreshPrincipal = _refreshTokenManager.GetPrincipal(tokenDto.RefreshToken);
+                var user = await _manager.FindByNameAsync(refreshPrincipal.Identity.Name);
+                var accesToken = await _accesTokenManager.GenerateToken(user);
+                var refreshToken = await _refreshTokenManager.GenerateToken(user);
+                return new TokenDto
+                {
+                    AccesToken = accesToken,
+                    RefreshToken = refreshToken
+                };
             }
-
-            return claims;
+            return tokenDto;
         }
-
-        private JwtSecurityToken GenerateTokenOptions(SigningCredentials signinCredentials, List<Claim> claims)
-        {
-            var jwtSettings = _configuration.GetSection("JWT");
-
-            var tokenOptions = new JwtSecurityToken(
-                issuer : jwtSettings["Issuer"],
-                audience : jwtSettings["Audience"],
-                claims : claims,
-                expires : DateTime.Now.AddMinutes(Convert.ToDouble(jwtSettings["Expires"])),
-                signingCredentials : signinCredentials
-                );
-
-            return tokenOptions;
-        }
-        private string GenerateRefreshToken()
-        {
-            var randomNumber = new byte[32];
-
-            using(var rng = RandomNumberGenerator.Create())
-            {
-                rng.GetBytes(randomNumber);
-                return Convert.ToBase64String(randomNumber);
-            }
-        }
-        private ClaimsPrincipal GetPrincipalFromExpiredToken(string accesToken)
-        {
-            var jwtSettings = _configuration.GetSection("JWT");
-            var key = jwtSettings["Key"];
-
-            var tokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuer = true,
-                ValidateAudience = true,
-                ValidateLifetime = true,
-                ValidateIssuerSigningKey = true,
-                ValidIssuer = jwtSettings["Issuer"],
-                ValidAudience = jwtSettings["Audience"],
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key))
-            };
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-            SecurityToken securityToken;
-
-            var principal = tokenHandler.ValidateToken(accesToken, tokenValidationParameters, out securityToken);
-
-            var jwtSecurityToken = securityToken as JwtSecurityToken;
-
-            if (jwtSecurityToken is null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
-                throw new SecurityTokenException("Invalid Token");
-
-            return principal;
-
-
-        }
-    } 
+    }
 }

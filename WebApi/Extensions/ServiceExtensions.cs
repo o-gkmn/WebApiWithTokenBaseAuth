@@ -1,6 +1,7 @@
 ﻿using Entities.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Repositories;
@@ -35,6 +36,12 @@ namespace WebApi.Extensions
             services.AddScoped<IAuthService, AuthManager>();
         }
 
+        public static void ConfigureTokenManager(this IServiceCollection services)
+        {
+            services.AddScoped<IAccesTokenManager, AccesTokenManager>();
+            services.AddScoped<IRefreshTokenManager, RefreshTokenManager>();
+        }
+
         public static void ConfigureIdentity(this IServiceCollection services)
         {
             var builder = services.AddIdentity<User, IdentityRole>(opts =>
@@ -53,8 +60,9 @@ namespace WebApi.Extensions
 
         public static void ConfigureJwt(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddScoped<TokenAuthenticationFilter>();
             var jwtSettings = configuration.GetSection("JWT");
-            var key = jwtSettings["Key"];
+            var key = jwtSettings["AccesTokenKey"];
 
             services.AddAuthentication(x =>
             {
@@ -66,7 +74,6 @@ namespace WebApi.Extensions
                 {
                     ValidateIssuer = true,
                     ValidateAudience = true,
-                    ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
                     ValidIssuer = jwtSettings["Issuer"],
                     ValidAudience = jwtSettings["Audience"],
