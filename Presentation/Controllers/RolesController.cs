@@ -15,63 +15,66 @@ namespace Presentation.Controllers
             _service = service;
         }
 
-        [HttpGet("GetAllRoles")]
+        [HttpGet("roles")]
         public IActionResult GetAllRoles()
         {
             var roles = _service.RoleService.GetAllRoles();
             return Ok(roles);
         }
 
-        [HttpGet("{roleName}")]
-        public async Task<IActionResult> GetRoleByNameAsync([FromRoute(Name = "roleName")] string roleName)
+        [HttpGet("{role}")]
+        public async Task<IActionResult> GetRoleByNameAsync([FromRoute(Name = "role")] string roleName)
         {
+            roleName = roleName.Replace("_", " ");
             var role = await _service.RoleService.GetRoleByNameAsync(roleName);
             return Ok(role);
         }
 
-        [HttpPost("CreateRole")]
+        [HttpPost("create_role")]
         public async Task<IActionResult> CreateRoleAsync([FromBody] RoleDtoForInsertion roleDtoForInsertion)
         {
             await _service.RoleService.CreateRoleAsync(roleDtoForInsertion);
             return Ok();
         }
 
-        [HttpPost("DeleteRole")]
-        public async Task<IActionResult> DeleteRoleAsync([FromBody()] string roleName)
+        [HttpPost("delete_role")]
+        public async Task<IActionResult> DeleteRoleAsync([FromBody()] RoleDtoForInsertion roleDtoForInsertion)
         {
-            await _service.RoleService.DeleteRoleAsync(roleName);
+            await _service.RoleService.DeleteRoleAsync(roleDtoForInsertion.Name);
             return Ok();
         }
 
-        [HttpPut("UpdateRole/{roleName}")]
-        public async Task<IActionResult> UpdateRoleAsync([FromRoute(Name = "roleName")] string roleName, [FromBody] RoleDtoForUpdate roleDtoForUpdate)
+        [HttpPut("update_role/{role}")]
+        public async Task<IActionResult> UpdateRoleAsync([FromRoute(Name = "role")] string role, [FromBody] RoleDtoForUpdate roleDtoForUpdate)
         {
-            var result = await _service.RoleService.UpdateRoleAsync(roleName, roleDtoForUpdate);
+            role = role.Replace("_", " ");
+            var result = await _service.RoleService.UpdateRoleAsync(role, roleDtoForUpdate);
             return Ok();
         }
 
-        [HttpGet("GetRolesForUser/{user}")]
+        [HttpGet("get_roles/{user}")]
         public async Task<IActionResult> GetRolesForUserAsync([FromRoute(Name = "user")] string user)
         {
             var roles = await _service.RoleService.GetRolesForUserAsync(user);
             return Ok(roles);
         }
 
-        [HttpGet("GetUsersInRole/{role}")]
+        [HttpGet("get_users/{role}")]
         public async Task<IActionResult> GetUsersInRoleAsync([FromRoute(Name = "role")] string role)
         {
+            role = role.Replace("_", " ");
             var users = await _service.RoleService.GetUsersInRoleAsync(role);
             return Ok(users);
         }
 
-        [HttpPost("AddRoleToUser")]
+        [HttpPost("add_role_to_user")]
         public async Task<IActionResult> AddRoleToUserAsync([FromBody] UserRoleDto userRoleDto)
         {
             var result = await _service.RoleService.AddRoleToUserAsync(userRoleDto.userName, userRoleDto.roleName);
             return result ? Ok() : BadRequest();
         }
 
-        [HttpPost("DeleteRoleFromUser")]
+        [HttpPost("delete_role_from_user")]
         public async Task<IActionResult> DeleteRoleFromUserAsync([FromBody] UserRoleDto userRoleDto)
         {
             var result = await _service.RoleService.DeleteRoleFromUserAsync(userRoleDto.userName, userRoleDto.roleName);
