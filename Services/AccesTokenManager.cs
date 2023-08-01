@@ -38,10 +38,10 @@ namespace Services
             var validationParamaters = GetValidationParameters();
             var tokenHandler = new JwtSecurityTokenHandler();
             SecurityToken securityToken;
-            
+
             var principal = tokenHandler.ValidateToken(token, validationParamaters, out securityToken);
             var jwtSecurityToken = securityToken as JwtSecurityToken;
-            
+
             if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
                 throw new SecurityTokenException("Invalid token");
 

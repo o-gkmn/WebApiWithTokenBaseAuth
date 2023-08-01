@@ -13,10 +13,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.ConfigureSqlServer(builder.Configuration);
 builder.Services.ConfigureIdentity();
-builder.Services.ConfigureServiceManager();
+builder.Services.ConfigureServiceManagers();
 builder.Services.ConfigureRepositoryManager();
-builder.Services.RegisterServices();
-builder.Services.ConfigureTokenManager();
 builder.Services.ConfigureJwt(builder.Configuration);
 
 var app = builder.Build();

@@ -4,8 +4,16 @@ namespace Repositories.EFCore
 {
     public class RepositoryManager : IRepositoryManager
     {
-        public RepositoryManager()
+        private readonly RepositoryContext _context;
+
+        public RepositoryManager(RepositoryContext context)
         {
+            _context = context;
+        }
+
+        public async Task Save()
+        {
+            await _context.SaveChangesAsync();
         }
     }
 }

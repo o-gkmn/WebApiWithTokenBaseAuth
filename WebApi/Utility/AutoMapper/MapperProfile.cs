@@ -10,6 +10,9 @@ namespace WebApi.Utility.AutoMapper
         {
             CreateMap<UserForRegistrationDto, User>();
             CreateMap<UserForLoginDto, User>();
+            CreateMap<RoleDtoForInsertion, Role>();
+            CreateMap<RoleDtoForUpdate, Role>();
+            CreateMap<User, UserDto>();
         }
     }
 }

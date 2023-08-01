@@ -2,5 +2,6 @@
 {
     public interface IRepositoryManager
     {
+        Task Save();
     }
 }

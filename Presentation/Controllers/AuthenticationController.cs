@@ -1,5 +1,4 @@
 ﻿using Entities.DataTransferObject;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Contracts;
 
@@ -44,14 +43,6 @@ namespace WebApi
         {
             var tokenDtoReturn = await _manager.AuthenticationService.RefreshToken(tokenDto);
             return Ok(tokenDtoReturn);
-        }
-
-        [ServiceFilter(typeof(TokenAuthenticationFilter))]
-        [HttpGet("console")]
-        public IActionResult ConsoleWrite()
-        {
-            Console.WriteLine("Hello World");
-            return Ok();
         }
     }
 }
