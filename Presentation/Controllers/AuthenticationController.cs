@@ -44,13 +44,5 @@ namespace WebApi
             var tokenDtoReturn = await _manager.AuthenticationService.RefreshToken(tokenDto);
             return Ok(tokenDtoReturn);
         }
-
-        [ServiceFilter(typeof(TokenAuthenticationFilter))]
-        [HttpGet("console")]
-        public IActionResult ConsoleWrite()
-        {
-            Console.WriteLine("Hello World");
-            return Ok();
-        }
     }
 }

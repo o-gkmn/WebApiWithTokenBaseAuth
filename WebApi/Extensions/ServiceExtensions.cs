@@ -24,25 +24,18 @@ namespace WebApi.Extensions
             services.AddScoped<IRepositoryManager, RepositoryManager>();
         }
 
-        public static void ConfigureServiceManager(this IServiceCollection services)
+        public static void ConfigureServiceManagers(this IServiceCollection services)
         {
             services.AddScoped<IServiceManager, ServiceManager>();
-        }
-
-        public static void RegisterServices(this IServiceCollection services)
-        {
             services.AddScoped<IAuthService, AuthManager>();
-        }
-
-        public static void ConfigureTokenManager(this IServiceCollection services)
-        {
             services.AddScoped<IAccesTokenManager, AccesTokenManager>();
             services.AddScoped<IRefreshTokenManager, RefreshTokenManager>();
+            services.AddScoped<IRoleService, RoleManager>();
         }
 
         public static void ConfigureIdentity(this IServiceCollection services)
         {
-            var builder = services.AddIdentity<User, IdentityRole>(opts =>
+            var builder = services.AddIdentity<User, Role>(opts =>
             {
                 opts.Password.RequireDigit = true;
                 opts.Password.RequireLowercase = false;

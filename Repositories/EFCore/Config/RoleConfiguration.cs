@@ -1,25 +1,25 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Repositories.EFCore.Config
 {
-    public class RoleConfiguration : IEntityTypeConfiguration<IdentityRole>
+    public class RoleConfiguration : IEntityTypeConfiguration<Role>
     {
-        public void Configure(EntityTypeBuilder<IdentityRole> builder)
+        public void Configure(EntityTypeBuilder<Role> builder)
         {
             builder.HasData(
-                new IdentityRole
+                new Role
                 {
                     Name = "User",
                     NormalizedName = "USER"
                 },
-                new IdentityRole
+                new Role
                 {
                     Name = "Editor",
                     NormalizedName = "EDITOR"
                 },
-                new IdentityRole
+                new Role
                 {
                     Name = "Admin",
                     NormalizedName = "ADMIN"
