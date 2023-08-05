@@ -15,5 +15,8 @@ namespace Services.Contracts
         Task<bool> DeleteRoleFromUserAsync(string userName, string roleName);
         Task<IEnumerable<string>> GetRolesForUserAsync(string userName);
         Task<List<UserDto>> GetUsersInRoleAsync(string roleName);
+        Task<bool> GivePermissionToRole(string roleName, string perm);
+        Task<bool> RemovePermissionFromRole(string roleName, string perm);
+        Task<IEnumerable<string>> GetAllPermissionsInRole(string roleName);
     }
 }

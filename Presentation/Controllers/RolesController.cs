@@ -1,6 +1,8 @@
 ﻿using Entities.DataTransferObject;
 using Microsoft.AspNetCore.Mvc;
+using Presentation.ActionFilters;
 using Services.Contracts;
+using WebApi.Constants;
 
 namespace Presentation.Controllers
 {
@@ -15,6 +17,7 @@ namespace Presentation.Controllers
             _service = service;
         }
 
+        [TypeFilter(typeof(AutherizationFilter), Arguments = new object[] { Permissions.CanReadRoles })]
         [HttpGet("roles")]
         public IActionResult GetAllRoles()
         {
@@ -22,6 +25,7 @@ namespace Presentation.Controllers
             return Ok(roles);
         }
 
+        [TypeFilter(typeof(AutherizationFilter), Arguments = new object[] { Permissions.CanReadRoles })]
         [HttpGet("{role}")]
         public async Task<IActionResult> GetRoleByNameAsync([FromRoute(Name = "role")] string roleName)
         {
@@ -30,6 +34,7 @@ namespace Presentation.Controllers
             return Ok(role);
         }
 
+        [TypeFilter(typeof(AutherizationFilter), Arguments = new object[] { Permissions.CanCreateRoles })]
         [HttpPost("create_role")]
         public async Task<IActionResult> CreateRoleAsync([FromBody] RoleDtoForInsertion roleDtoForInsertion)
         {
@@ -37,6 +42,7 @@ namespace Presentation.Controllers
             return Ok();
         }
 
+        [TypeFilter(typeof(AutherizationFilter), Arguments = new object[] { Permissions.CanDeleteRoles })]
         [HttpPost("delete_role")]
         public async Task<IActionResult> DeleteRoleAsync([FromBody()] RoleDtoForInsertion roleDtoForInsertion)
         {
@@ -44,6 +50,7 @@ namespace Presentation.Controllers
             return Ok();
         }
 
+        [TypeFilter(typeof(AutherizationFilter), Arguments = new object[] { Permissions.CanUpdateRoles })]
         [HttpPut("update_role/{role}")]
         public async Task<IActionResult> UpdateRoleAsync([FromRoute(Name = "role")] string role, [FromBody] RoleDtoForUpdate roleDtoForUpdate)
         {
@@ -52,6 +59,7 @@ namespace Presentation.Controllers
             return Ok();
         }
 
+        [TypeFilter(typeof(AutherizationFilter), Arguments = new object[] { Permissions.CanReadRolesInUser })]
         [HttpGet("get_roles/{user}")]
         public async Task<IActionResult> GetRolesForUserAsync([FromRoute(Name = "user")] string user)
         {
@@ -59,6 +67,7 @@ namespace Presentation.Controllers
             return Ok(roles);
         }
 
+        [TypeFilter(typeof(AutherizationFilter), Arguments = new object[] { Permissions.CanReadRolesInUser })]
         [HttpGet("get_users/{role}")]
         public async Task<IActionResult> GetUsersInRoleAsync([FromRoute(Name = "role")] string role)
         {
@@ -67,6 +76,7 @@ namespace Presentation.Controllers
             return Ok(users);
         }
 
+        [TypeFilter(typeof(AutherizationFilter), Arguments = new object[] { Permissions.CanAssignRoleToUser })]
         [HttpPost("add_role_to_user")]
         public async Task<IActionResult> AddRoleToUserAsync([FromBody] UserRoleDto userRoleDto)
         {
@@ -74,11 +84,37 @@ namespace Presentation.Controllers
             return result ? Ok() : BadRequest();
         }
 
+        [TypeFilter(typeof(AutherizationFilter), Arguments = new object[] { Permissions.CanDeleteRoleFromUser })]
         [HttpPost("delete_role_from_user")]
         public async Task<IActionResult> DeleteRoleFromUserAsync([FromBody] UserRoleDto userRoleDto)
         {
             var result = await _service.RoleService.DeleteRoleFromUserAsync(userRoleDto.userName, userRoleDto.roleName);
             return result ? Ok() : BadRequest();
+        }
+
+        [TypeFilter(typeof(AutherizationFilter), Arguments = new object[] { Permissions.CanGivePermissionToRole })]
+        [HttpPost("give_permission_to_role")]
+        public async Task<IActionResult> GivePermissionToRole([FromBody] PermissionDto permissionDto) 
+        {
+            var result = await _service.RoleService.GivePermissionToRole(permissionDto.Role, permissionDto.Permission);
+            return result ? Ok() : BadRequest();
+        }
+
+        [TypeFilter(typeof(AutherizationFilter), Arguments = new object[] { Permissions.CanRemovePermissionFromRole })]
+        [HttpPost("remove_permission_from_role")]
+        public async Task<IActionResult> RemovePermissionFromRole([FromBody] PermissionDto permissionDto)
+        {
+            var result = await _service.RoleService.RemovePermissionFromRole(permissionDto.Role, permissionDto.Permission);
+            return result ? Ok() : BadRequest();
+        }
+
+        [TypeFilter(typeof(AutherizationFilter), Arguments = new object[] { Permissions.CanReadPermissions })]
+        [HttpGet("get_all_permission_in_role/{role}")]
+        public async Task<IActionResult> GetAllPermissionsInRole([FromRoute(Name = "role")] string role)
+        {
+            role = role.Replace("_", " ");
+            var result = await _service.RoleService.GetAllPermissionsInRole(role);
+            return Ok(result);
         }
     }
 }

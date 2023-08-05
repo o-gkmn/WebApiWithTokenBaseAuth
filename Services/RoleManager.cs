@@ -4,6 +4,8 @@ using Entities.Exceptions;
 using Entities.Models;
 using Microsoft.AspNetCore.Identity;
 using Services.Contracts;
+using System.Security.Claims;
+using WebApi.Constants;
 
 namespace Services
 {
@@ -24,6 +26,7 @@ namespace Services
         {
             var role = _mapper.Map<Role>(roleDtoForInsertion);
             var result = await _roleManager.CreateAsync(role);
+
             if (result.Succeeded)
                 return true;
             else
@@ -111,7 +114,7 @@ namespace Services
                 throw new RoleNotFoundException(roleName);
 
             var result = await _userManager.AddToRoleAsync(user, roleName);
-            
+
             return result.Succeeded;
         }
 
@@ -129,10 +132,72 @@ namespace Services
             var roles = await _userManager.GetRolesAsync(user);
             if (!roles.Contains(roleName, StringComparer.InvariantCultureIgnoreCase))
                 throw new RoleNotFoundForUser(roleName, userName);
-            
+
             var result = await _userManager.RemoveFromRoleAsync(user, roleName);
             return result.Succeeded;
         }
 
+        public async Task<bool> GivePermissionToRole(string roleName, string perm)
+        {
+            var role = await _roleManager.FindByNameAsync(roleName);
+
+            if (role is null)
+                throw new RoleNotFoundException(role.Name.ToString());
+
+            var claims = await _roleManager.GetClaimsAsync(role);
+
+            if (!CheckPermissionIsExists(perm))
+                return false;
+
+            if (claims.Any(c => c.Type.Equals(perm)))
+                return true;
+
+            var result = await _roleManager.AddClaimAsync(role, new Claim(perm, "true"));
+            return result.Succeeded;
+        }
+
+        public async Task<bool> RemovePermissionFromRole(string roleName, string perm)
+        {
+            var role = await _roleManager.FindByNameAsync(roleName);
+
+            if (role is null)
+                throw new RoleNotFoundException(role.Name.ToString());
+
+            var claims = await _roleManager.GetClaimsAsync(role);
+
+            foreach (var claim in claims)
+            {
+                if (claim.Type.Equals(perm))
+                {
+                    var result = await _roleManager.RemoveClaimAsync(role, claim);
+                    return result.Succeeded;
+                }
+            }
+            return false;
+        }
+
+        public async Task<IEnumerable<string>> GetAllPermissionsInRole(string roleName)
+        {
+            var role = await _roleManager.FindByNameAsync(roleName);
+
+            if (role is null)
+                throw new RoleNotFoundException(roleName);
+
+            var claims = await _roleManager.GetClaimsAsync(role);
+            return claims.Select(c => c.Type);
+        }
+
+        private bool CheckPermissionIsExists(string perm)
+        {
+            foreach (var permission in Permissions.PermissionsList)
+            {
+                if (permission.Equals(perm))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
 }
