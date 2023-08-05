@@ -16,7 +16,7 @@ namespace WebApi.Extensions
         public static void ConfigureSqlServer(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<RepositoryContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("sqlConnection")));
+                options.UseSqlServer(configuration.GetConnectionString("sqlConnection")), ServiceLifetime.Transient);
         }
 
         public static void ConfigureRepositoryManager(this IServiceCollection services)
@@ -28,9 +28,9 @@ namespace WebApi.Extensions
         {
             services.AddScoped<IServiceManager, ServiceManager>();
             services.AddScoped<IAuthService, AuthManager>();
-            services.AddScoped<IAccesTokenManager, AccesTokenManager>();
-            services.AddScoped<IRefreshTokenManager, RefreshTokenManager>();
             services.AddScoped<IRoleService, RoleManager>();
+            services.AddScoped<IRefreshTokenManager, RefreshTokenManager>();
+            services.AddScoped<IAccesTokenManager, AccesTokenManager>();
         }
 
         public static void ConfigureIdentity(this IServiceCollection services)
@@ -51,7 +51,6 @@ namespace WebApi.Extensions
 
         public static void ConfigureJwt(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddScoped<TokenAuthenticationFilter>();
             var jwtSettings = configuration.GetSection("JWT");
             var key = jwtSettings["AccesTokenKey"];
 

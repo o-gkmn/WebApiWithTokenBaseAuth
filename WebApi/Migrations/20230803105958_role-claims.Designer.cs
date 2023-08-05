@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repositories.EFCore;
 
@@ -11,9 +12,10 @@ using Repositories.EFCore;
 namespace WebApi.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    partial class RepositoryContextModelSnapshot : ModelSnapshot
+    [Migration("20230803105958_role-claims")]
+    partial class roleclaims
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -140,6 +142,10 @@ namespace WebApi.Migrations
                     b.Property<string>("ClaimValue")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("RoleId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -149,6 +155,8 @@ namespace WebApi.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetRoleClaims", (string)null);
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityRoleClaim<string>");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -244,25 +252,37 @@ namespace WebApi.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "252cc335-7d65-4b8e-8f17-85e25772c18b",
+                            Id = "65ded3d8-4fc2-46f7-ac1f-349850b6f02a",
                             Name = "User",
                             NormalizedName = "USER",
-                            createdAt = new DateTime(2023, 8, 3, 11, 19, 59, 63, DateTimeKind.Utc).AddTicks(5526)
+                            createdAt = new DateTime(2023, 8, 3, 10, 59, 57, 819, DateTimeKind.Utc).AddTicks(4431)
                         },
                         new
                         {
-                            Id = "e9ea8058-76ca-43ec-a70d-a061faeb399a",
+                            Id = "9ff6219f-22d3-4d76-90af-1c421a7a5278",
                             Name = "Editor",
                             NormalizedName = "EDITOR",
-                            createdAt = new DateTime(2023, 8, 3, 11, 19, 59, 63, DateTimeKind.Utc).AddTicks(5573)
+                            createdAt = new DateTime(2023, 8, 3, 10, 59, 57, 819, DateTimeKind.Utc).AddTicks(4478)
                         },
                         new
                         {
-                            Id = "ee153c7e-6b7e-4f53-a26a-925893aa7881",
+                            Id = "fd7c7060-24b3-41b9-84a7-2bc2b7cfd455",
                             Name = "Admin",
                             NormalizedName = "ADMIN",
-                            createdAt = new DateTime(2023, 8, 3, 11, 19, 59, 63, DateTimeKind.Utc).AddTicks(5578)
+                            createdAt = new DateTime(2023, 8, 3, 10, 59, 57, 819, DateTimeKind.Utc).AddTicks(4487)
                         });
+                });
+
+            modelBuilder.Entity("Entities.Models.RoleClaim", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>");
+
+                    b.Property<string>("RoleId1")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasIndex("RoleId1");
+
+                    b.HasDiscriminator().HasValue("RoleClaim");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -314,6 +334,18 @@ namespace WebApi.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Entities.Models.RoleClaim", b =>
+                {
+                    b.HasOne("Entities.Models.Role", null)
+                        .WithMany("Claims")
+                        .HasForeignKey("RoleId1");
+                });
+
+            modelBuilder.Entity("Entities.Models.Role", b =>
+                {
+                    b.Navigation("Claims");
                 });
 #pragma warning restore 612, 618
         }
