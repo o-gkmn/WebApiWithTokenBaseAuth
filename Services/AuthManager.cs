@@ -62,9 +62,9 @@ namespace Services
             };
         }
 
-        public async Task<TokenDto> RefreshToken(TokenDto tokenDto)
+        public async Task<TokenDto?> RefreshToken(RefreshTokenDto tokenDto)
         {
-            if (!_accesTokenManager.ValidateToken(tokenDto.AccesToken) && _refreshTokenManager.ValidateToken(tokenDto.RefreshToken))
+            if (_refreshTokenManager.ValidateToken(tokenDto.RefreshToken))
             {
                 var refreshPrincipal = _refreshTokenManager.GetPrincipal(tokenDto.RefreshToken);
                 var user = await _manager.FindByNameAsync(refreshPrincipal.Identity.Name);
@@ -76,7 +76,7 @@ namespace Services
                     RefreshToken = refreshToken
                 };
             }
-            return tokenDto;
+            return null;
         }
     }
 }
