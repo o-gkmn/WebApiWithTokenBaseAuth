@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repositories.EFCore;
 
@@ -11,9 +12,10 @@ using Repositories.EFCore;
 namespace WebApi.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    partial class RepositoryContextModelSnapshot : ModelSnapshot
+    [Migration("20230807064205_PhoneNumberCheck")]
+    partial class PhoneNumberCheck
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -244,24 +246,24 @@ namespace WebApi.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "99fc1255-e621-4db5-a8be-e3e3afc19aa8",
+                            Id = "94315c6f-6ca3-4428-aa7f-47b5704764b4",
                             Name = "User",
                             NormalizedName = "USER",
-                            createdAt = new DateTime(2023, 8, 7, 6, 46, 51, 298, DateTimeKind.Utc).AddTicks(6205)
+                            createdAt = new DateTime(2023, 8, 7, 6, 42, 4, 758, DateTimeKind.Utc).AddTicks(9053)
                         },
                         new
                         {
-                            Id = "3f71587c-1e1b-4cc8-96a9-1b9d776ca5c4",
+                            Id = "ce80a5cf-fbce-488e-a3be-c45fb9cc2bba",
                             Name = "Editor",
                             NormalizedName = "EDITOR",
-                            createdAt = new DateTime(2023, 8, 7, 6, 46, 51, 298, DateTimeKind.Utc).AddTicks(6251)
+                            createdAt = new DateTime(2023, 8, 7, 6, 42, 4, 758, DateTimeKind.Utc).AddTicks(9107)
                         },
                         new
                         {
-                            Id = "0345b89e-acf0-4d00-be1a-1a185cf34cda",
+                            Id = "9e830a08-1d8f-4af7-a69a-901d0c7f6ca4",
                             Name = "Admin",
                             NormalizedName = "ADMIN",
-                            createdAt = new DateTime(2023, 8, 7, 6, 46, 51, 298, DateTimeKind.Utc).AddTicks(6258)
+                            createdAt = new DateTime(2023, 8, 7, 6, 42, 4, 758, DateTimeKind.Utc).AddTicks(9116)
                         });
                 });
 

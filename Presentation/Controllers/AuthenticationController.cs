@@ -40,10 +40,10 @@ namespace WebApi
         }
 
         [HttpPost("refresh")]
-        public async Task<IActionResult> Refresh([FromBody] TokenDto tokenDto)
+        public async Task<IActionResult> Refresh([FromBody] RefreshTokenDto tokenDto)
         {
             var tokenDtoReturn = await _manager.AuthenticationService.RefreshToken(tokenDto);
-            return Ok(tokenDtoReturn);
+            return tokenDtoReturn is null ? Ok(tokenDtoReturn) : BadRequest();
         }
     }
 }
