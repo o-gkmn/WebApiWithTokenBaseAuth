@@ -1,0 +1,66 @@
+2023-08-08 11:10:39.7146 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2023-08-08 11:10:39.8517 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.2.3.1999. Product version: 5.2.3+a5ddef92a8afb22508450803e37c001f4a3ba52a. GlobalAssemblyCache: False
+2023-08-08 11:10:39.8883 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\ozgur\Desktop\Home\Developed\Asp.Net Core\WebApiWithTokenBaseAuth\WebApi\nlog.config
+2023-08-08 11:10:39.9273 Info Configuration initialized.
+2023-08-08 11:11:54.6130 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2023-08-08 11:11:54.6647 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.2.3.1999. Product version: 5.2.3+a5ddef92a8afb22508450803e37c001f4a3ba52a. GlobalAssemblyCache: False
+2023-08-08 11:11:54.6930 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\ozgur\Desktop\Home\Developed\Asp.Net Core\WebApiWithTokenBaseAuth\WebApi\nlog.config
+2023-08-08 11:11:54.7267 Info Configuration initialized.
+2023-08-08 11:17:23.4675 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2023-08-08 11:17:23.5589 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.2.3.1999. Product version: 5.2.3+a5ddef92a8afb22508450803e37c001f4a3ba52a. GlobalAssemblyCache: False
+2023-08-08 11:17:23.5946 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\ozgur\Desktop\Home\Developed\Asp.Net Core\WebApiWithTokenBaseAuth\WebApi\nlog.config
+2023-08-08 11:17:23.6345 Info Configuration initialized.
+2023-08-08 11:18:56.7326 Info AppDomain Shutting down. LogFactory closing...
+2023-08-08 11:18:56.8389 Info LogFactory has been closed.
+2023-08-08 11:24:23.2804 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2023-08-08 11:24:23.3968 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.2.3.1999. Product version: 5.2.3+a5ddef92a8afb22508450803e37c001f4a3ba52a. GlobalAssemblyCache: False
+2023-08-08 11:24:23.4339 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\ozgur\Desktop\Home\Developed\Asp.Net Core\WebApiWithTokenBaseAuth\WebApi\nlog.config
+2023-08-08 11:24:23.4785 Info Configuration initialized.
+2023-08-08 13:28:22.1406 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2023-08-08 13:28:22.1975 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.2.3.1999. Product version: 5.2.3+a5ddef92a8afb22508450803e37c001f4a3ba52a. GlobalAssemblyCache: False
+2023-08-08 13:28:22.2196 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\ozgur\Desktop\Home\Developed\Asp.Net Core\WebApiWithTokenBaseAuth\WebApi\nlog.config
+2023-08-08 13:28:22.2585 Info Configuration initialized.
+2023-08-08 13:31:00.8413 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2023-08-08 13:31:00.9003 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.2.3.1999. Product version: 5.2.3+a5ddef92a8afb22508450803e37c001f4a3ba52a. GlobalAssemblyCache: False
+2023-08-08 13:31:00.9354 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\ozgur\Desktop\Home\Developed\Asp.Net Core\WebApiWithTokenBaseAuth\WebApi\nlog.config
+2023-08-08 13:31:00.9858 Info Configuration initialized.
+2023-08-08 13:33:14.4718 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2023-08-08 13:33:14.6703 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.2.3.1999. Product version: 5.2.3+a5ddef92a8afb22508450803e37c001f4a3ba52a. GlobalAssemblyCache: False
+2023-08-08 13:33:14.7293 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\ozgur\Desktop\Home\Developed\Asp.Net Core\WebApiWithTokenBaseAuth\WebApi\nlog.config
+2023-08-08 13:33:14.7793 Info Configuration initialized.
+2023-08-08 13:45:49.9604 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2023-08-08 13:45:50.0380 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.2.3.1999. Product version: 5.2.3+a5ddef92a8afb22508450803e37c001f4a3ba52a. GlobalAssemblyCache: False
+2023-08-08 13:45:50.0879 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\ozgur\Desktop\Home\Developed\Asp.Net Core\WebApiWithTokenBaseAuth\WebApi\nlog.config
+2023-08-08 13:45:50.1340 Info Configuration initialized.
+2023-08-08 13:48:51.2616 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2023-08-08 13:48:51.2896 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.2.3.1999. Product version: 5.2.3+a5ddef92a8afb22508450803e37c001f4a3ba52a. GlobalAssemblyCache: False
+2023-08-08 13:48:51.3215 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\ozgur\Desktop\Home\Developed\Asp.Net Core\WebApiWithTokenBaseAuth\WebApi\nlog.config
+2023-08-08 13:48:51.3545 Info Configuration initialized.
+2023-08-08 13:48:53.6860 Info AppDomain Shutting down. LogFactory closing...
+2023-08-08 13:48:53.7034 Info LogFactory has been closed.
+2023-08-08 13:51:25.3092 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2023-08-08 13:51:25.3272 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.2.3.1999. Product version: 5.2.3+a5ddef92a8afb22508450803e37c001f4a3ba52a. GlobalAssemblyCache: False
+2023-08-08 13:51:25.3433 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\ozgur\Desktop\Home\Developed\Asp.Net Core\WebApiWithTokenBaseAuth\WebApi\nlog.config
+2023-08-08 13:51:25.3631 Info Configuration initialized.
+2023-08-08 13:51:29.6129 Info AppDomain Shutting down. LogFactory closing...
+2023-08-08 13:51:29.6323 Info LogFactory has been closed.
+2023-08-08 13:55:09.9170 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2023-08-08 13:55:10.1236 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.2.3.1999. Product version: 5.2.3+a5ddef92a8afb22508450803e37c001f4a3ba52a. GlobalAssemblyCache: False
+2023-08-08 13:55:10.2146 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\ozgur\Desktop\Home\Developed\Asp.Net Core\WebApiWithTokenBaseAuth\WebApi\nlog.config
+2023-08-08 13:55:10.3511 Info Configuration initialized.
+2023-08-08 13:57:55.4953 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2023-08-08 13:57:55.6131 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.2.3.1999. Product version: 5.2.3+a5ddef92a8afb22508450803e37c001f4a3ba52a. GlobalAssemblyCache: False
+2023-08-08 13:57:55.6478 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\ozgur\Desktop\Home\Developed\Asp.Net Core\WebApiWithTokenBaseAuth\WebApi\nlog.config
+2023-08-08 13:57:55.6912 Info Configuration initialized.
+2023-08-09 09:55:53.3349 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2023-08-09 09:55:53.7779 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.2.3.1999. Product version: 5.2.3+a5ddef92a8afb22508450803e37c001f4a3ba52a. GlobalAssemblyCache: False
+2023-08-09 09:55:53.8217 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\ozgur\Desktop\Home\Developed\Asp.Net Core\WebApiWithTokenBaseAuth\WebApi\nlog.config
+2023-08-09 09:55:53.9133 Info Configuration initialized.
+2023-08-09 10:03:30.8426 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2023-08-09 10:03:30.9037 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.2.3.1999. Product version: 5.2.3+a5ddef92a8afb22508450803e37c001f4a3ba52a. GlobalAssemblyCache: False
+2023-08-09 10:03:30.9530 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\ozgur\Desktop\Home\Developed\Asp.Net Core\WebApiWithTokenBaseAuth\WebApi\nlog.config
+2023-08-09 10:03:31.0169 Info Configuration initialized.
+2023-08-09 10:33:27.0676 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2023-08-09 10:33:27.2768 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.2.3.1999. Product version: 5.2.3+a5ddef92a8afb22508450803e37c001f4a3ba52a. GlobalAssemblyCache: False
+2023-08-09 10:33:27.3186 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\ozgur\Desktop\Home\Developed\Asp.Net Core\WebApiWithTokenBaseAuth\WebApi\nlog.config
+2023-08-09 10:33:27.3693 Info Configuration initialized.

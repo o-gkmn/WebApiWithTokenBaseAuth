@@ -18,5 +18,7 @@ namespace Services.Contracts
         Task<bool> GivePermissionToRole(string roleName, string perm);
         Task<bool> RemovePermissionFromRole(string roleName, string perm);
         Task<IEnumerable<string>> GetAllPermissionsInRole(string roleName);
+        public Task<Role?> DecodeRoleFromToken(string token);
+
     }
 }
