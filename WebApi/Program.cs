@@ -1,7 +1,11 @@
 
+using NLog;
+using Services.Contracts;
 using WebApi.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
+
+LogManager.LoadConfiguration(String.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
 
 // Add services to the container.
 
@@ -17,9 +21,11 @@ builder.Services.ConfigureIdentity();
 builder.Services.ConfigureServiceManagers();
 builder.Services.ConfigureRepositoryManager();
 builder.Services.ConfigureJwt(builder.Configuration);
+builder.Services.ConfigureLoggerService();
 
 var app = builder.Build();
 
+var logger = app.Services.GetRequiredService<ILoggerService>();
 app.ConfigureExceptionHandler();
 
 // Configure the HTTP request pipeline.

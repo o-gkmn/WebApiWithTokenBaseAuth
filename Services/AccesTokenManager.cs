@@ -12,13 +12,15 @@ namespace Services
 {
     public class AccesTokenManager : TokenManagerBase, IAccesTokenManager
     {
+        private readonly ILoggerService _logger;
         private readonly IConfiguration _configuration;
         private readonly UserManager<User> _manager;
 
-        public AccesTokenManager(IConfiguration configuration, UserManager<User> manager)
+        public AccesTokenManager(IConfiguration configuration, UserManager<User> manager, ILoggerService logger)
         {
             _configuration = configuration;
             _manager = manager;
+            _logger = logger;
         }
 
         public async Task<string> GenerateToken(User user)
@@ -43,7 +45,10 @@ namespace Services
             var jwtSecurityToken = securityToken as JwtSecurityToken;
 
             if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+            {
+                _logger.LogError($"token doesnt validate for {principal.Identity.Name}");
                 throw new SecurityTokenException("Invalid token");
+            }
 
             return principal;
         }

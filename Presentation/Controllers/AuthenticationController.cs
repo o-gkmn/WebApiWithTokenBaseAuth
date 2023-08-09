@@ -1,6 +1,5 @@
 ﻿using Entities.DataTransferObject;
 using Microsoft.AspNetCore.Mvc;
-using Presentation.ActionFilters;
 using Services.Contracts;
 
 namespace WebApi
@@ -43,7 +42,8 @@ namespace WebApi
         public async Task<IActionResult> Refresh([FromBody] RefreshTokenDto tokenDto)
         {
             var tokenDtoReturn = await _manager.AuthenticationService.RefreshToken(tokenDto);
-            return tokenDtoReturn is null ? Ok(tokenDtoReturn) : BadRequest();
+            return tokenDtoReturn is not null ? Ok(tokenDtoReturn) : BadRequest();
         }
+
     }
 }

@@ -11,15 +11,19 @@ namespace Services
 {
     public class RoleManager : IRoleService
     {
+        private readonly ILoggerService _logger;
         private readonly IMapper _mapper;
         private readonly RoleManager<Role> _roleManager;
         private readonly UserManager<User> _userManager;
+        private readonly IAccesTokenManager _accesTokenManager;
 
-        public RoleManager(IMapper mapper, RoleManager<Role> roleManager, UserManager<User> userManager)
+        public RoleManager(IMapper mapper, RoleManager<Role> roleManager, UserManager<User> userManager, ILoggerService logger, IAccesTokenManager accesTokenManager)
         {
             _mapper = mapper;
             _roleManager = roleManager;
             _userManager = userManager;
+            _logger = logger;
+            _accesTokenManager = accesTokenManager;
         }
 
         public async Task<bool> CreateRoleAsync(RoleDtoForInsertion roleDtoForInsertion)
@@ -30,20 +34,30 @@ namespace Services
             if (result.Succeeded)
                 return true;
             else
+            {
+                _logger.LogError(result.Errors.FirstOrDefault().Description);
                 throw new Exception(result.Errors.FirstOrDefault().Description);
+            }
         }
 
         public async Task<bool> DeleteRoleAsync(string roleName)
         {
             var role = await _roleManager.FindByNameAsync(roleName);
             if (role == null)
+            {
+                _logger.LogError($"{roleName} could not found");
                 throw new RoleNotFoundException(roleName);
+            }
+
             var result = await _roleManager.DeleteAsync(role);
 
             if (result.Succeeded)
                 return true;
             else
+            {
+                _logger.LogError(result.Errors.FirstOrDefault().Description);
                 throw new Exception(result.Errors.FirstOrDefault().Description);
+            }
         }
 
         public IEnumerable<Role> GetAllRoles()
@@ -56,7 +70,10 @@ namespace Services
         {
             var role = await _roleManager.FindByNameAsync(roleName);
             if (role is null)
+            {
+                _logger.LogError($"{roleName} could not found");
                 throw new RoleNotFoundException(roleName);
+            }
             return role;
         }
 
@@ -66,6 +83,7 @@ namespace Services
 
             if (role == null)
             {
+                _logger.LogError($"{name} could not found");
                 return false;
             }
 
@@ -81,7 +99,10 @@ namespace Services
             var user = await _userManager.FindByNameAsync(userName);
 
             if (user is null)
+            {
+                _logger.LogError($"{userName} could not found");
                 throw new UserNotFoundException(userName);
+            }
 
             var roles = await _userManager.GetRolesAsync(user);
             return roles;
@@ -90,7 +111,10 @@ namespace Services
         public async Task<List<UserDto>> GetUsersInRoleAsync(string roleName)
         {
             if (!await _roleManager.RoleExistsAsync(roleName))
+            {
+                _logger.LogError($"{roleName} could not found");
                 throw new RoleNotFoundException(roleName);
+            }
             var users = await _userManager.GetUsersInRoleAsync(roleName);
             var userDtoList = new List<UserDto>();
 
@@ -108,10 +132,16 @@ namespace Services
             var role = await _roleManager.FindByNameAsync(roleName);
 
             if (user is null)
+            {
+                _logger.LogError($"{userName} could not found");
                 throw new UserNotFoundException(userName);
+            }
 
             if (role is null)
+            {
+                _logger.LogError($"{roleName} could not found");
                 throw new RoleNotFoundException(roleName);
+            }
 
             var result = await _userManager.AddToRoleAsync(user, roleName);
 
@@ -124,14 +154,23 @@ namespace Services
             var role = await _roleManager.FindByNameAsync(roleName);
 
             if (user is null)
+            {
+                _logger.LogError($"{userName} could not found");
                 throw new UserNotFoundException(userName);
+            }
 
             if (role is null)
+            {
+                _logger.LogError($"{roleName} could not found");
                 throw new RoleNotFoundException(roleName);
+            }
 
             var roles = await _userManager.GetRolesAsync(user);
             if (!roles.Contains(roleName, StringComparer.InvariantCultureIgnoreCase))
+            {
+                _logger.LogError($"{roleName} could not found for {userName}");
                 throw new RoleNotFoundForUser(roleName, userName);
+            }
 
             var result = await _userManager.RemoveFromRoleAsync(user, roleName);
             return result.Succeeded;
@@ -142,12 +181,18 @@ namespace Services
             var role = await _roleManager.FindByNameAsync(roleName);
 
             if (role is null)
+            {
+                _logger.LogError($"{roleName} could not found");
                 throw new RoleNotFoundException(role.Name.ToString());
+            }
 
             var claims = await _roleManager.GetClaimsAsync(role);
 
             if (!CheckPermissionIsExists(perm))
+            {
+                _logger.LogError($"{perm} could not found for {roleName}");
                 return false;
+            }
 
             if (claims.Any(c => c.Type.Equals(perm)))
                 return true;
@@ -161,7 +206,10 @@ namespace Services
             var role = await _roleManager.FindByNameAsync(roleName);
 
             if (role is null)
-                throw new RoleNotFoundException(role.Name.ToString());
+            {
+                _logger.LogError($"{roleName} could not found");
+                throw new RoleNotFoundException(roleName);
+            }
 
             var claims = await _roleManager.GetClaimsAsync(role);
 
@@ -181,10 +229,48 @@ namespace Services
             var role = await _roleManager.FindByNameAsync(roleName);
 
             if (role is null)
+            {
+                _logger.LogError($"{roleName} could not found");
                 throw new RoleNotFoundException(roleName);
+            }
 
             var claims = await _roleManager.GetClaimsAsync(role);
             return claims.Select(c => c.Type);
+        }
+
+        public async Task<Role?> DecodeRoleFromToken(string token)
+        {
+            if (string.IsNullOrEmpty(token))
+            {
+                _logger.LogWarning("Token is empty");
+                return null;
+            }
+
+            var principal = _accesTokenManager.GetPrincipal(token);
+
+            if (principal is null)
+            {
+                _logger.LogError($"Principal is not get from token : Token : {token}");
+                return null;
+            }
+
+            foreach (var claim in principal.Claims)
+            {
+                if (claim.Type == ClaimTypes.Role)
+                {
+                    var role = await _roleManager.FindByNameAsync(claim.Value);
+
+                    if (role is null)
+                    {
+                        _logger.LogWarning($"Role not found : null");
+                        throw new RoleNotFoundException("null");
+                    }
+
+                    return role;
+                }
+            }
+
+            return null;
         }
 
         private bool CheckPermissionIsExists(string perm)

@@ -116,5 +116,16 @@ namespace Presentation.Controllers
             var result = await _service.RoleService.GetAllPermissionsInRole(role);
             return Ok(result);
         }
+
+        [TypeFilter(typeof(AutherizationFilter), Arguments = new object[] { Permissions.CanReadRoles })]
+        [HttpGet("get_user_role_from_token")]
+        public async Task<IActionResult> GetRoleFromToken()
+        {
+            var token = Request.Headers.Authorization.FirstOrDefault()?.Replace("Bearer ", "");
+            var result = await _service.RoleService.DecodeRoleFromToken(token);
+
+            return result is not null ? Ok(result) : BadRequest();
+        }
+
     }
 }

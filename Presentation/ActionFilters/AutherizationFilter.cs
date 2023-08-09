@@ -10,17 +10,19 @@ namespace Presentation.ActionFilters
 {
     public class AutherizationFilter : Attribute, IAsyncAuthorizationFilter
     {
+        private readonly ILoggerService _logger;
         private readonly IAccesTokenManager _accessTokenManager;
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<Role> _roleManager;
         private readonly string? _policy;
 
-        public AutherizationFilter(IAccesTokenManager accessTokenManager, UserManager<User> userManager, RoleManager<Role> roleManager, string? Policy = null)
+        public AutherizationFilter(IAccesTokenManager accessTokenManager, UserManager<User> userManager, RoleManager<Role> roleManager, string? Policy = null, ILoggerService logger = null)
         {
             _accessTokenManager = accessTokenManager;
             _userManager = userManager;
             _roleManager = roleManager;
             _policy = Policy;
+            _logger = logger;
         }
 
         public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
@@ -34,6 +36,7 @@ namespace Presentation.ActionFilters
 
             if (string.IsNullOrEmpty(token))
             {
+                _logger.LogError("Token is empty");
                 context.Result = new UnauthorizedResult();
                 return;
             }
@@ -43,6 +46,7 @@ namespace Presentation.ActionFilters
                 if (!_accessTokenManager.ValidateToken(token))
                 {
                     context.Result = new UnauthorizedResult();
+                    _logger.LogError($"Failed to validate token: {token}");
                     return;
                 }
 
@@ -50,6 +54,7 @@ namespace Presentation.ActionFilters
 
                 if (principal == null)
                 {
+                    _logger.LogError("Principal is null");
                     context.Result = new NotFoundResult();
                     return;
                 }
@@ -64,6 +69,7 @@ namespace Presentation.ActionFilters
 
                 if (user == null)
                 {
+                    _logger.LogError($"{principal.Identity.Name} could not found");
                     context.Result = new NotFoundResult();
                     return;
                 }
