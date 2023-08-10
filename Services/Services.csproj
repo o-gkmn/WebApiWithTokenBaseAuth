@@ -9,7 +9,10 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.20" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.12.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="NLog" Version="5.2.3" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.12.1" />
   </ItemGroup>
 
   <ItemGroup>

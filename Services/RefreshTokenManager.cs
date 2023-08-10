@@ -16,7 +16,7 @@ namespace Services
         private readonly IConfiguration _configuration;
         private readonly UserManager<User> _manager;
 
-        public RefreshTokenManager(IConfiguration configuration, UserManager<User> manager, ILoggerService logger)
+        public RefreshTokenManager(IConfiguration configuration, UserManager<User> manager, ILoggerService logger) : base(configuration) 
         {
             _configuration = configuration;
             _manager = manager;
@@ -29,19 +29,17 @@ namespace Services
             var claims = await GetClaims(user);
             var tokenOptions = GetTokenOptions(signingCredentials, claims);
 
-            var refreshToken = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+            var refreshToken = WriteToken(tokenOptions, SecretKey.RefreshTokenSecretKey);
             return refreshToken;
         }
 
-        public new bool ValidateToken(string token) => base.ValidateToken(token);
+        public new bool ValidateToken(string token) => base.ValidateToken(token, SecretKey.RefreshTokenSecretKey);
 
         public ClaimsPrincipal? GetPrincipal(string token)
         {
-            var validationParamaters = GetValidationParameters();
-            var tokenHandler = new JwtSecurityTokenHandler();
             SecurityToken securityToken;
 
-            var principal = tokenHandler.ValidateToken(token, validationParamaters, out securityToken);
+            var principal = ReadToken(token, SecretKey.RefreshTokenSecretKey, out securityToken);
             var jwtSecurityToken = securityToken as JwtSecurityToken;
 
             if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
@@ -51,24 +49,6 @@ namespace Services
             }
 
             return principal;
-        }
-
-        private TokenValidationParameters GetValidationParameters()
-        {
-            var jwtSettings = _configuration.GetSection("JWT");
-            var key = jwtSettings["RefreshTokenKey"];
-
-            var tokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuer = true,
-                ValidateAudience = true,
-                ValidateLifetime = true,
-                ValidateIssuerSigningKey = true,
-                ValidIssuer = jwtSettings["Issuer"],
-                ValidAudience = jwtSettings["Audience"],
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key))
-            };
-            return tokenValidationParameters;
         }
 
         private SecurityToken GetTokenOptions(SigningCredentials signingCredentials, List<Claim> claims)
