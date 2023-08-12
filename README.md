@@ -14,7 +14,7 @@ If user has not enoght level of authority for access to enpoint then cannot use 
   - Auto Mapper
   - NLog
 
-### Server
+### 🗄 Server
   - Microsoft SQL Server
 
 ### 🏁Endpoints
